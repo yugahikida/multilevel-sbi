@@ -1,0 +1,4 @@
+type: "mlmc" # or "mc", "tf"
+epochs: 10000
+summary_dim: 5
+n_list: [1000, 10]
