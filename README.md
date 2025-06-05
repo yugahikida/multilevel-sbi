@@ -1,5 +1,11 @@
 # Multilevel neural simulation-based inference
 
+This repository includes reproducing code for the paper:
+
+Hikida, Y., Bharti, A., Jeffrey, N., and Briol, F.-X.
+(2025). Multilevel neural simulation-based inference.
+to appear.
+
 ## Installation
 
 1. Download file or clone repository.
