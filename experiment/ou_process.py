@@ -71,10 +71,7 @@ def oup_MLMC(config):
      n_list_str = '_'.join(str(n) for n in n_list)
 
      if config.get('name') is None:
-          # if not change_lambda:
           name = 'oup_mlmc_n_{}{}'.format(n_list_str, comment)
-          # else:
-          #      name = 'oup_MLMC_n_{}_m_{}_lambda_{}_{}_newloss{}'.format(n_list_str, m, alpha, index, comment)
 
      else:
           name = config['name']
@@ -109,7 +106,6 @@ def oup_MC(config):
      theta_ =[theta[:n_train, :], theta[n_train:n_train+n_val, :]]
      x_ = [x[:n_train, :], x[n_train:n_train+n_val, :]]
 
-     # summary_net = lstm_summary(hidden_dim = summary_dim, t = int(T / dt))
      summary_net = subsampleSummary(T = T, dt = dt, sub_sample_size = summary_dim, add_more_in_tail = True).to(device)
      MC_net = NSF(input_dim = theta_dim, condition_dim = m,
                     num_bins = 2, hidden_features = 10, num_transforms = 2, tail_bound = 2.0, num_blocks = 1, 
@@ -143,7 +139,6 @@ def oup_TL(config, change_patience: bool = False, index: int = None):
      
 
      input_list_low, input_list_high, condition_list_low, condition_list_high = genreate_data_for_tl(n_0, n_1, val_rate, m, T, dt, device, three_param)
-     # summary_net = lstm_summary(hidden_dim = summary_dim, t = int(T / dt))
      summary_net = subsampleSummary(T = T, dt = dt, sub_sample_size = summary_dim, add_more_in_tail = add_more_in_tail).to(device)
      low_net = NSF(input_dim = theta_dim, condition_dim = m,
                     num_bins = 2, hidden_features = 10, num_transforms = 2, tail_bound = 2.0, num_blocks = 1, 

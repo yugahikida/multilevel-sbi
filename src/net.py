@@ -40,30 +40,6 @@ class MLMC_CDE:
 
     def MC_loss(self, input: Tensor, condition: Tensor) -> Tensor:
         return - self.log_prob(input = input, condition = condition).mean()
-    
-    # def MLMC_loss(self, input_list: List[Tensor], condition_list: List[Tensor], alpha: float = 1.0) -> Tensor:
-    #     L = int((len(condition_list) + 1) / 2)
-    #     loss = []
-    #     # vars = []
-    #     for l in range(L):
-    #         if l == 0:
-    #             f_0 = self.log_prob(input_list[0], condition_list[0])
-    #             loss.append(f_0.mean())
-    #             # vars.append(f_0.var())
-    #         else:
-    #             log_prob_1 = self.log_prob(input = input_list[2*l], condition = condition_list[2*l])
-    #             log_prob_0 = self.log_prob(input = input_list[2*l - 1], condition = condition_list[2*l - 1])
-    #             log_prob_diff = log_prob_1 - log_prob_0
-    #             loss.append(log_prob_diff.mean())
-    #             # vars.append(log_prob_diff.var())
-
-
-    #     # lamda = 1.0
-    #     # p = lamda * (log_prob_0.mean() - loss[0])**2
-    #     loss = - torch.sum(torch.stack(loss)) # + penalty
-    #     # loss = loss + p
-
-    #     return loss
 
 
     def MLMC_loss(self, input_list: List[Tensor], condition_list: List[Tensor], alpha: float = 1.0) -> Tuple[List[Tensor], Tensor]:
@@ -83,12 +59,6 @@ class MLMC_CDE:
                 loss.append(log_prob_0.mean())
                 vars.append(log_prob_diff.var())
 
-        # lamda = 1.0
-        # p =  lamda * (log_prob_0.mean() - loss[0])**2
-
-        # ell_0 = - loss[0]
-        # ell_1 = - log_prob_1.mean()
-        # ell_2 = log_prob_0.mean()
         return loss, vars[0].item() - vars[1].item()
     
     def MLMC_loss_diagnose(self, input_list: List[Tensor], condition_list: List[Tensor], alpha: float = 1.0) -> Tensor:
@@ -114,7 +84,6 @@ class MLMC_CDE:
 
         loss = ell_0 + ell_1 + ell_2
 
-        # loss = - torch.sum(torch.stack(loss)) # + p
         return loss, ell_0, ell_1, ell_2, vars[0].item() - vars[1].item()
     
     
@@ -389,10 +358,6 @@ class lstm_summary(nn.Module):
         self.num_layers = 1
         self.lstm = nn.LSTM(1, self.hidden_dim, self.num_layers, batch_first=True)
 
-        # self.conv = nn.Sequential(nn.Conv1d(self.input_size, 8, 3, 2),
-        #                           nn.Conv1d(8, 8, 3, 2),
-        #                           nn.Conv1d(8, 2, 3, 2),
-        #                           nn.AvgPool1d(2))
 
     def forward(self, Y):
         current_device = Y.device
@@ -432,20 +397,6 @@ class subsampleSummary(nn.Module):
 
         else:
             self.selected_index = torch.linspace(0, x_dim - 1, steps = sub_sample_size).long()
-        # self.selected_index = torch.randint(0, x_dim, (sub_sample_size, )).long()
 
     def forward(self, x: Tensor) -> Tensor:
         return x[:, :, self.selected_index].squeeze(1)
-    
-# class IIDSummary(nn.Module):
-#     def __init__(self, input_dim: int, hidden_dim: int, summary_dim: int):
-#         super().__init__()
-#         self.net = nn.Sequential(
-#             nn.Linear(input_dim, hidden_dim),
-#             nn.ReLU(),
-#             nn.Linear(hidden_dim, summary_dim),
-#         )
-
-#     def forward(self, Y) -> Tensor:
-#         stats = torch.stack([self.net(y.unsqueeze(-1)) for y in Y]).sum(dim = 1)
-#         return stats

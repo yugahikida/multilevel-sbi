@@ -7,8 +7,6 @@ class gnk():
   def __init__(self, sample_theta: bool = True, very_low: bool = False) -> None:
       self.sample_theta = sample_theta
       self.thete_default = np.array([3., 1., 2., math.exp(0.5)])   # same parameter as tutorial by pierrejacob
-      # self.param_range = np.array([[0, 0, 0, 0], [3, 3, 3, 3]])
-      # self.param_range = np.array([[2.5, 0.5, 1.5, 0.], [3.5, 1.5, 2.5, 1.0]])
       self.param_range = np.array([[0.0, 0.0, 0.0, math.exp(0.5)], [3.0, 3.0, 3.0, 3.0]]) # when 0.0 < theta_4 < exp(0.5), numerical estimation of likelihood get very unstable.
       self.very_low = very_low
 
@@ -102,28 +100,6 @@ class gnk():
       
       else:
           return _pdf
-
-
-if __name__ == '__main__':
-    import matplotlib.pyplot as plt
-    model = gnk(sample_theta = False)
-
-    u_star = model.noise_generator(n = 1, m = 2000)
-    theta_star = model.prior(n = 1)
-    x_star = model.high_simulator(theta = theta_star, noise = u_star)
-
-    x_grid = np.linspace(0, 20, 500)
-    density_x = model.logprob(x_grid, theta_star[0], log = False)
-    plt.hist(x_star[0], bins = 200, density = True, alpha = 0.5)
-    plt.plot(x_grid, density_x, label = 'True density')
-    plt.xlim([0, 20])
-    plt.show()
-
-    # theta_star, x_low = model(n = 1, m = 2000, high = False)
-    # plt.hist(x_low[0], bins = 200, density = True, alpha = 0.5)
-    # plt.plot(x_grid, density_x, label = 'True density')
-    # plt.show()
-
 
     
 

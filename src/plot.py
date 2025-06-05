@@ -259,8 +259,6 @@ def plot_loss(loss_array, start:int = 0, end: int = None):
     h0 = l - h1 - penalty
     var_diff = loss_array[:, 5]
 
-    # loss_without_panalty = l - penalty
-
     title_list = ['Loss', r'$h_0$', r'$h_1$', r"$E(f_{11})$", r"$E(f_{10})$",  r'$h_0 - E(f_{10})$', 'penalty', r'$Var(h_0) - Var(h_1)$']
 
     if end is None:
@@ -278,27 +276,15 @@ def plot_loss(loss_array, start:int = 0, end: int = None):
     axes[3].plot(x_axis, E_f11[start:end], label = '$E(f_1)$ (second term)', color='purple')
     axes[4].plot(x_axis, E_f10[start:end], label = '$E(f_0)$ (second term)', color='green')
     axes[5].plot(x_axis, h0[start:end] - E_f10[start:end], label = 'Second term', color='gray')
-    # axes[3].plot(x_axis, loss_without_panalty[start:end], label = 'Loss without penalty', color='green')
     axes[6].plot(x_axis, penalty[start:end], label= 'penalty', color='orange')
     axes[6].scatter(first_positive_index, penalty[first_positive_index], color='red', zorder=5)
     axes[7].plot(x_axis, var_diff[start:end], label= r'$Var(f_1 - f_0) - f_0)$', color='pink')
-    # axes[7].hlines(0, color='black', linestyle='--')
-
-
-    # print(h1[1])
-    # print((E_f11 - E_f10)[1])
-
-
-    # assert (l == h0 + h1).all()
-    # assert (h1 == E_f11 - E_f10).all()
-
 
     for i in range(len(title_list)):
        axes[i].set_title(title_list[i])
 
        if i == 4:
           axes[i].set_xlabel('Epoch')
-    # fig.legend()
     fig.tight_layout()
 
     return fig

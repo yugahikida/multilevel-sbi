@@ -78,8 +78,6 @@ def ts_MC(config):
      theta_ =[theta[:n_train, :], theta[n_train:n_train+n_val, :]]
      x_ = [x[:n_train, :], x[n_train:n_train+n_val, :]]
      
-     # MC_net = NSF(input_dim = x.shape[-1], condition_dim = theta.shape[-1],
-     #               num_bins = 10, hidden_features = 50, num_transforms = 1, tail_bound = 3.0, num_blocks = 3, dropout_probability = 0.1).to(device)
      MC_net = GMDN(input_dim = x.shape[-1], condition_dim = theta.shape[-1]).to(device)
      MC_net = MC_train(MC_net, x_, theta_, epochs = epochs, lr = 0.0001, use_val = True)
 

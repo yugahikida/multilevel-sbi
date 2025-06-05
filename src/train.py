@@ -75,40 +75,9 @@ def MLMC_train(network: nn.Module, input_list: list[Tensor], condition_list: lis
             torch.nn.utils.clip_grad_norm_(network.parameters(), max_norm = max_norm)
             optimizer.step()
 
-
-            # return_loss = True
-            # if return_loss:
-            #     ell_0 = loss[0]; ell_1 = loss[1]; ell_2 = loss[2]
-            #     loss_array[e, 0] = ell_0 + ell_1 + ell_2
-            #     loss_array[e, 1] = ell_0.item()
-            #     loss_array[e, 2] = ell_1.item()
-            #     loss_array[e, 3] = ell_2.item()
-                # nabla_1 = nabla_list[1]
-                # nabla_2 = nabla_list[2]
-                # cos01 = torch.nn.functional.cosine_similarity(nabla_0, nabla_1, dim=0)
-                # cos02 = torch.nn.functional.cosine_similarity(nabla_0, nabla_2_scaled, dim=0)
-                # cos12 = torch.nn.functional.cosine_similarity(nabla_1, nabla_2_scaled, dim=0)
-                # cos0diff = torch.nn.functional.cosine_similarity(nabla_0, nabla_diff_new, dim=0)
-
-                # loss_array[e, 1] = ell_0.item()
-                # loss_array[e, 2] = ell_1.item()
-                # loss_array[e, 3] = ell_2.item()
-                # loss_array[e, 4] = nabla_0.norm().item()
-                # loss_array[e, 5] = norm1.item()
-                # loss_array[e, 6] = norm_2_scaled.item()
-                # loss_array[e, 7] = cos01.item()
-                # loss_array[e, 8] = cos02.item()
-                # loss_array[e, 9] = cos12.item()
-                # loss_array[e, 10] = var_diff
-                # loss_array[e, 11] = cos0diff.item()
-
         loss = torch.stack(loss).sum()
         pbar.set_description(f"Epoch: {e}", refresh = True)
         pbar.set_postfix({'loss': f"{loss:.4f}"}, refresh = True)
-
-            
-
-        # network.load_state_dict(best_model)
                  
         return network, loss_array
 
@@ -158,38 +127,6 @@ def MC_train(network: Tensor, input, condition,
                          return network
 
         return network
-
-# def MC_train_val(network: nn.Module, input_list: list[Tensor], condition_list: list[Tensor],
-#                  epochs = 3000, max_norm = 5.0, lr = 0.0005, weight_decay = 0.0, patience: float = 20) -> nn.Module:
-#         optimizer = torch.optim.Adam(network.parameters(), lr = lr, betas = (0.85, 0.999), weight_decay = weight_decay)
-#         input, condition = network.MC_standardize(input_list[0], condition_list[0])
-#         input_val, condition_val = standardize(input_list[1]), standardize(condition_list[1])
-        
-#         early_stopping = EarlyStopping(patience = patience)
-
-#         for e in (pbar := tqdm(range(epochs))):
-#             network.train()
-#             optimizer.zero_grad()
-#             loss = network.MC_loss(input = input, condition = condition)
-#             loss.backward()
-#             torch.nn.utils.clip_grad_norm_(network.parameters(), max_norm = max_norm)
-#             optimizer.step()
-
-#             network.eval()
-#             with torch.no_grad():
-#                   loss_val = network.MC_loss(input = input_val, condition = condition_val)
-
-#             early_stopping(loss_val, network)
-
-#             pbar.set_description(f"Epoch: {e}", refresh = True)
-#             pbar.set_postfix({'loss': f"{loss:.4f}"}, refresh = True)
-
-#             if early_stopping.early_stop:
-#                  print("Early stopping")
-#                  network.load_state_dict(early_stopping.best_model)
-#                  return network
-
-#         return network
 
 
 class EarlyStopping:

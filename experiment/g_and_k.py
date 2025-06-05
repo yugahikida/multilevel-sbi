@@ -70,8 +70,6 @@ def likelihood_MLMC(config):
 
     input_list, condition_list = generate_mf_data_gnk(n_0, n_1, m, type = "nle", device = device)
 
-    #  MLMC_net = GMDN(input_dim = 1, condition_dim = param_dim, num_components = 3, n_layers = 3, hidden_features = 32).to(device)
-
     MLMC_net = NSF(input_dim = 1, condition_dim = param_dim,
                    num_bins = 10, hidden_features = 50, num_transforms = 1, tail_bound = 7.0, num_blocks = 3, dropout_probability = 0.1).to(device)
 
@@ -80,10 +78,7 @@ def likelihood_MLMC(config):
     n_list_str = '_'.join(str(n) for n in n_list)
 
     if config.get('name') is None:
-         # if not change_lambda
          name = 'gnk_nle_mlmc_n_{}{}'.format(n_list_str, comment)
-     #     else:
-     #          name = 'gnk_nle_MLMC_n_{}_lambda_{}_{}_newloss{}'.format(n_list_str, alpha, index, comment)
     else:
          name = config['name']
 
@@ -91,19 +86,6 @@ def likelihood_MLMC(config):
           torch.save(MLMC_net.state_dict(), f"result/gnk/{name}_weight.pt")
           torch.save(MLMC_net, f"result/gnk/{name}.pt")
           np.save(f"result/gnk/{name}_loss.npy", loss_array)
-
-# def pick_lambda_NLE(config):
-#     lambda_list = config['lambda_list']
-#     n_run_per_lambda = config['n_run_per_lambda']
-#     epoch_default = config['epochs']
-
-#     for lamda in lambda_list:
-#          config['alpha'] = lamda
-#          config['epochs'] = epoch_default
-
-#          print(f"lambda = {config['alpha']}")
-#          for i in range(n_run_per_lambda):
-#               likelihood_MLMC(config, index = i, change_lambda = True)
 
 def likelihood_MC(config):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -143,12 +125,10 @@ def posterior_MLMC(config):
     summary_dim = config['summary_dim']
     comment = "_" + config['comment'] if config.get('comment') is not None else ""
 
-    # summary_net = IIDSummary(input_dim = 1, hidden_dim = 5, summary_dim = summary_dim).to(device)
     summary_net = gnk_summary().to(device)
     input_list, condition_list = generate_mf_data_gnk(n_0, n_1, m, type = "npe", device = device)
     MLMC_net = NSF(input_dim = param_dim, condition_dim = m, embedding_net = summary_net, embedding_dim = summary_dim,
                    num_bins = 3, hidden_features = 32, num_transforms = 3, tail_bound = 3.0, num_blocks = 2, dropout_probability = 0.1).to(device)
-    # MLMC_net = MAF(input_dim = param_dim, condition_dim = m, hidden_features = 20, num_transforms = 3, embedding_net = summary_net, embedding_dim = summary_dim).to(device) # if this did not work well, use summary network.
     MLMC_net, loss_array  = MLMC_train(MLMC_net, input_list, condition_list, epochs = epochs, lr = 0.0001)
 
     n_list_str = '_'.join(str(n) for n in n_list)
@@ -171,9 +151,7 @@ def posterior_MC(config):
     high_str = '' if high else '_low'
 
     theta, x = generate_data_gnk(n = n, m = m, high = high, device = device, val_rate = 0.1)
-    # summary_net = IIDSummary(input_dim = 1, hidden_dim = 5, summary_dim = summary_dim).to(device)
     summary_net = gnk_summary().to(device)
-
     MC_net = NSF(input_dim = param_dim, condition_dim = m, embedding_net = summary_net, embedding_dim = summary_dim,
                  num_bins = 3, hidden_features = 32, num_transforms = 3, tail_bound = 3.0, num_blocks = 2, dropout_probability = 0.1).to(device)
     MC_net = MC_train(MC_net, theta, x, epochs = epochs, lr = 0.0001, use_val = True)
@@ -201,9 +179,6 @@ def main(config):
                posterior_MC(config)
           else:
                raise ValueError("Invalid type")
-          
-     # elif config['task'] == 'pick_lambda':
-     #      pick_lambda_NLE(config)
      else:
           raise ValueError("Invalid type")
      

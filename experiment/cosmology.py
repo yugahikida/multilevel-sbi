@@ -49,8 +49,6 @@ def generate_data_cosmology(n, device, use_binning = True, val_rate = 0.1):
     assert n <= 1000, "n should be less than or equal to 1000"
 
     x_high = np.load('data/x_high.npy')
-    # x_low = np.load('data/x_low.npy')
-    param_dim = 1
     params_full = np.loadtxt('data/CosmoAstroSeed_IllustrisTNG_L25n256_LH.txt', skiprows = 1, usecols = (1, 2, 3, 4, 5, 6)) # [1000, 6]
     theta = torch.tensor(np.expand_dims(params_full[:n, 1], -1), dtype = torch.float32).to(device)
 
@@ -87,8 +85,6 @@ def posterior_MLMC(config):
     comment = '_' + config['comment'] if config.get('comment') is not None else ''
 
     input_list, condition_list = generate_mf_data_cosmology(n_0, n_1, device = device, use_binning = use_binning)
-    # MLMC_net = NSF(input_dim = param_dim, condition_dim = m,
-    #                num_bins = 3, hidden_features = 16, num_transforms = 3, tail_bound = 3.0, num_blocks = 2, dropout_probability = 0.1).to(device) 
     MLMC_net = NSF(input_dim = param_dim, condition_dim = m,
                    num_bins = 3, hidden_features = 30, num_transforms = 3, tail_bound = 3.0, num_blocks = 2, dropout_probability = 0.1).to(device)
 
@@ -106,18 +102,6 @@ def posterior_MLMC(config):
     torch.save(MLMC_net, f"result/cosmo/{name}.pt")
     np.save(f"result/cosmo/{name}_loss.npy", loss_array)
 
-def cosmology_multi(config):
-    n_0_list =  [600 + 10 * i for i in range(0, 40)]
-    n_1_list = [1000 - n_0 for n_0 in n_0_list]
-    list_n_list = [[n_0_list[i], n_1_list[i]] for i in range(len(n_0_list))]
-    for n_list in list_n_list:
-        print("MLMC (n_0, n_1): ", n_list)
-        config['n_list'] = n_list
-        posterior_MLMC(config)
-        print("MC n: ", n_list[1])
-        config['n'] = n_list[1]
-        posterior_MC(config)
-
 
 def posterior_MC(config):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -131,8 +115,6 @@ def posterior_MC(config):
     comment = '_' + config['comment'] if config.get('comment') is not None else ''
 
     theta, x = generate_data_cosmology(n = n, device = device, val_rate = 0.1, use_binning = use_binning)
-    # MC_net = NSF(input_dim = param_dim, condition_dim = m,
-    #              num_bins = 3, hidden_features = 16, num_transforms = 2, tail_bound = 3.0, num_blocks = 1, dropout_probability = 0.1).to(device)
     MC_net = NSF(input_dim = param_dim, condition_dim = m,
                  num_bins = 3, hidden_features = 30, num_transforms = 3, tail_bound = 3.0, num_blocks = 2, dropout_probability = 0.1).to(device)
     MC_net = MC_train(MC_net, theta, x, epochs = epochs, use_val = True, lr = 0.0001)
