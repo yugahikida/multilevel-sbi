@@ -9,7 +9,7 @@
 ## Quick start
 All the experiments can be run using following code.
 
-`python3 experiment/xxx.py yyy.yaml`
+```python3 experiment/xxx.py yyy.yaml```
 
 where `xxx` is the name of experiment: `[g_and_k, ou_process, toggle_switch, cosmology]`
 and `yyy` is the name of configuration file. 
@@ -64,7 +64,7 @@ MLMC_net = NSF(input_dim, condition_dim)
 
 3. Train conditional density estimator.
 You can train the conditional density estimator as follow. The function returns trained `MLMC_net`. 
-`MLMC_net, _ = MLMC_train(MLMC_net, input_list, condition_list)`
+```MLMC_net, _ = MLMC_train(MLMC_net, input_list, condition_list)```
 
 
 ## License
