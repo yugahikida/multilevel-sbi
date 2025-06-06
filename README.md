@@ -19,7 +19,7 @@ All the experiments can be run using following code.
 
 where `xxx` is the name of experiment: `[g_and_k, ou_process, toggle_switch, cosmology]`
 and `yyy` is the name of configuration file. 
-For examples, `python3 experiment/g_and_k.py gnk_likelihood.yaml` would run ML-NLE for the g-and-k experiment.
+For example, `python3 experiment/g_and_k.py gnk_likelihood.yaml` would run ML-NLE for the g-and-k experiment.
 Here is the list of configuration files (inside `config` folder). You can change the value of `n_list` to run experiment with different $n_l$ other than the one set as default.
 
 - `gnk_likelihood_mc.yaml`: NLE for g and k experiment. Set `high: true` to use data from high fidelity simulator and otherwise `false`.
@@ -33,7 +33,7 @@ Here is the list of configuration files (inside `config` folder). You can change
 - `cosmo_mc.yaml`: Run NPE for cosmology experiment.
 - `cosmo_mlmc.yaml`: Run ML-NPE for cosmology experiment.
 
-## Reproducing figure
+## Reproducing figures
 You can reproduce the figures in the paper by running following Jupyter notebooks (inside `notebook` folder).
 
 - Figure 1: `CAMELS_plots.ipynb`
@@ -52,7 +52,7 @@ You can reproduce the figures in the paper by running following Jupyter notebook
 ## Adding more experiment
 
 1. Prepare `input_list` and `condition_list`
--  The both should be lists of `Torch.tensor`, 
+-  They both should be lists of `torch.Tensor`, 
 -  Consider 2-level ML-NPE. Then
 	-  `input_list[0]` should be $\\{ \theta_i^{(0)}\\}^{n_0}$ and `input_list[1]` and `input_list[2]` shoud be $\\{ \theta_i^{(1)} \\}^{n_1}$
 	-  `condition_list[0]` should be $\\{x_i^{0}\\}^{n_0}$,  `condition_list[1]` and `condition_list[2]` should be $\\{x_i^{(0)}\\}^{n_1}$, and  $\\{x_i^{(1)}\\}^{n_1}$ (seed matched low-fidelity samples and high fidelity samples).
@@ -69,8 +69,11 @@ MLMC_net = NSF(input_dim, condition_dim)
 ```
 
 3. Train conditional density estimator.
-You can train the conditional density estimator as follow. The function returns trained `MLMC_net`. 
-```MLMC_net, _ = MLMC_train(MLMC_net, input_list, condition_list)```
+You can train the conditional density estimator as follow. The function returns trained `MLMC_net`.
+
+```
+MLMC_net, _ = MLMC_train(MLMC_net, input_list, condition_list)
+```
 
 
 ## License
