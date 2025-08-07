@@ -1,0 +1,7 @@
+type: "mc_multi" # or "mc", "tf"
+epochs: 10000
+summary_dim: 5
+n: 100
+n_run: 20
+three_param: false
+high: true

@@ -1,0 +1,10 @@
+type: "tl_patience" 
+epochs: 10000
+n_list: [1010, 10]
+val_rate: 0.1
+summary_dim: 5
+patience_list: [1, 20, 100, 1000]
+n_run_per_patience: 20
+three_param: false
+
+

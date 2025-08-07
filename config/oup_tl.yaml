@@ -1,0 +1,6 @@
+type: "tl" 
+epochs: 10000
+n_list: [1010, 10]
+val_rate: 0.1
+summary_dim: 5
+patience: 20

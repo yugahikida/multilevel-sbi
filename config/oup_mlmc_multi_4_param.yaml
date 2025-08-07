@@ -1,0 +1,6 @@
+type: "mlmc_multi" # or "mc", "tf"
+epochs: 500
+summary_dim: 5
+n_list: [1000, 10]
+n_run_per_lambda: 20
+three_param: false

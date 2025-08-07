@@ -1,0 +1,8 @@
+task: "mc"
+T: 300
+epochs: 500
+n_list: [1000, 100, 50]
+T_list: [50, 80, 300]
+# to calculate cost and n
+# n_list: [800, 200, 50]
+# T_list: [50, 100, 300]

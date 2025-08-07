@@ -1,0 +1,7 @@
+task: "posterior"
+type: "mc"
+epochs: 800
+n: 100
+m: 1000
+summary_dim: 4
+high: true

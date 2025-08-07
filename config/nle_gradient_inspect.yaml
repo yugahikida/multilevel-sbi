@@ -1,0 +1,7 @@
+task: "likelihood"
+type: "mlmc"
+epochs: 1000
+n_list: [10000, 300]
+m: 1
+gradient_surgery: false
+gradient_rescale: false

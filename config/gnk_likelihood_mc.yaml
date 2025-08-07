@@ -1,0 +1,6 @@
+task: "likelihood"
+type: "mc"
+epochs: 2000
+n: 300
+m: 1
+high: true

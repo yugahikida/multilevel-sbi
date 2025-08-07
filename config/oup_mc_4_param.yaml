@@ -1,0 +1,6 @@
+type: "mc"
+epochs: 10000
+summary_dim: 5
+n: 10000
+high: true
+three_param: false

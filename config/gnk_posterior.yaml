@@ -1,0 +1,6 @@
+task: "posterior"
+type: "mlmc"
+epochs: 800
+n_list: [1000, 10]
+m: 1000
+summary_dim: 4

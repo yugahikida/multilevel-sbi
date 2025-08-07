@@ -1,0 +1,3 @@
+type: "mlmc"
+epochs: 500
+n_list: [700, 300]

@@ -1,0 +1,8 @@
+task: "posterior"
+type: "mlmc"
+epochs: 800
+n_list: [1000, 100]
+m: 1000
+summary_dim: 4
+gradient_surgery: false
+gradient_rescale: false
